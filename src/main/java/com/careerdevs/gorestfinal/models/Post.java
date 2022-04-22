@@ -1,10 +1,17 @@
 package com.careerdevs.gorestfinal.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.UUID;
+
+
+//The default SQL configuration for a String is VARCHAR(255), which means a character limit of 255. GoRest Post.body has a max limit of 500 so importing posts from GoRest will fail if we do not modify this default. Take the following steps to fix this issue
+//        Open your Post.java file within models and find the ‘body’ field
+//        add the following annotation above the field:
+//@Column(length = 512)
+//Open your MySQL CLI and access the gorestfinal database by using “USE gorestfinal;”
+//        Then run the command “DROP TABLE post”
+//        Then restart/start your SpringBoot server
+//        Now your post table will be able to take in strings with a character length max of 512
 @Entity
 public class Post {
 
@@ -16,6 +23,7 @@ public class Post {
 
     private String title;
 
+    @Column(length = 512)
     private String body;
 
     public long getId() {
