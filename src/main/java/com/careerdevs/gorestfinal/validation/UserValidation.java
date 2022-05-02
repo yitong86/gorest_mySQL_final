@@ -17,7 +17,7 @@ public class UserValidation {
 
         if(isUpdate){
 
-            if(user.getId() == null){
+            if(user.getId() == 0){
                 errors.addError("id","Id can not be left blank");
             }else {
                 Optional<User> foundUser = userRepo.findById(user.getId());
@@ -39,7 +39,7 @@ public class UserValidation {
             errors.addError("name","Name can not be left blank");
         }
         if(userEmail == null || userEmail.trim().equals("")){
-            errors.addError("name","Email can not be left blank");
+            errors.addError("Email","Email can not be left blank");
         }
         if(userGender == null || userGender.trim().equals("")){
             errors.addError("name","Gender can not be left blank");

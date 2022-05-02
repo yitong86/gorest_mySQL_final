@@ -2,6 +2,7 @@ package com.careerdevs.gorestfinal.controllers;
 
 import com.careerdevs.gorestfinal.models.Post;
 import com.careerdevs.gorestfinal.repositories.PostRepository;
+import com.careerdevs.gorestfinal.repositories.UserRepository;
 import com.careerdevs.gorestfinal.utils.ApiErrorHandling;
 import com.careerdevs.gorestfinal.validation.PostValidation;
 import com.careerdevs.gorestfinal.validation.ValidationError;
@@ -39,6 +40,8 @@ public class PostController{
 
     @Autowired
     PostRepository postRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllPosts(){
@@ -53,7 +56,7 @@ public class PostController{
         @GetMapping("/{id}")
         public ResponseEntity<?> getOnePost(@PathVariable ("id") String id){
             try{
-                if(ApiErrorHandling.isStrNaN(id))
+                if(ApiErrorHandling.isStrNaN(id))// is not a number
                     throw new HttpClientErrorException(HttpStatus.BAD_REQUEST,id + " is not a valid ID.");
 
 
@@ -168,7 +171,7 @@ public class PostController{
                 Post[] pagePosts = restTemplate.getForObject(pageUrl,Post[].class);
 
                 if(pagePosts == null){
-                    throw  new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR,"Failed to Get page " + i + "of users from GoRest");
+                    throw  new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR,"Failed to Get page " + i + "of posts from GoRest");
 
                 }
                     allPosts.addAll(Arrays.asList(firstPagePosts));
@@ -191,7 +194,7 @@ public class PostController{
     public ResponseEntity<?> createPost(@RequestBody Post newPost){
         try{
 
-            ValidationError errors = PostValidation.validatePost(newPost,postRepository,false);
+            ValidationError errors = PostValidation.validatePost(newPost,postRepository,userRepository,false);
             if(errors.hasError()){
                 throw new HttpClientErrorException(HttpStatus.BAD_REQUEST,errors.toJSONString());
             }
@@ -212,7 +215,7 @@ public class PostController{
     public ResponseEntity<?> updatePost(@RequestBody Post updatePost){
         try{
 
-            ValidationError newPostErrors = PostValidation.validatePost(updatePost,postRepository,true);
+            ValidationError newPostErrors = PostValidation.validatePost(updatePost,postRepository,userRepository,true);
             if(newPostErrors.hasError()){
                 throw  new HttpClientErrorException(HttpStatus.BAD_REQUEST,newPostErrors.toString());
             }

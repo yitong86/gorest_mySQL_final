@@ -49,7 +49,7 @@ public class UserController {
                 throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, id + " is not a valid ID");
 
 
-            int uID = Integer.parseInt(id);
+            long uID = Long.parseLong(id);
 
             Optional<User> foundUser = userRepository.findById(uID);
 
@@ -77,8 +77,8 @@ public class UserController {
             }
 
 
-            int uID = Integer.parseInt(id);
-
+           // int uID = Integer.parseInt(id);
+            long uID = Long.parseLong(id);
             Optional<User> foundUser = userRepository.findById(uID);
 
             if (foundUser.isEmpty()) {

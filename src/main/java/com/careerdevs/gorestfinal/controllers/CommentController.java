@@ -21,8 +21,11 @@ package com.careerdevs.gorestfinal.controllers;
 import com.careerdevs.gorestfinal.models.Comment;
 import com.careerdevs.gorestfinal.models.Post;
 import com.careerdevs.gorestfinal.repositories.CommentRepository;
+import com.careerdevs.gorestfinal.repositories.PostRepository;
+import com.careerdevs.gorestfinal.repositories.UserRepository;
 import com.careerdevs.gorestfinal.utils.ApiErrorHandling;
 import com.careerdevs.gorestfinal.validation.CommentValidation;
+import com.careerdevs.gorestfinal.validation.PostValidation;
 import com.careerdevs.gorestfinal.validation.ValidationError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -43,6 +46,8 @@ public class CommentController {
 
     @Autowired
     CommentRepository commentRepository;
+    @Autowired
+    PostRepository postRepository;
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllComments(){
@@ -178,7 +183,9 @@ public class CommentController {
     @PostMapping("/")
     public ResponseEntity<?> createComment(@RequestBody Comment newComment){
         try{
-            ValidationError errors = CommentValidation.validateComment(newComment,commentRepository,false);
+
+
+            ValidationError errors = CommentValidation.validateComment(newComment, commentRepository,postRepository,false);
             if(errors.hasError()){
                 throw new HttpClientErrorException(HttpStatus.BAD_REQUEST,errors.toJSONString());
 
@@ -196,7 +203,7 @@ public class CommentController {
     @PutMapping("/")
     public ResponseEntity<?> updateComment(@RequestBody Comment updateComment){
         try{
-            ValidationError newCommentErrors = CommentValidation.validateComment(updateComment,commentRepository,true);
+            ValidationError newCommentErrors = CommentValidation.validateComment(updateComment,commentRepository,postRepository,true);
             if(newCommentErrors.hasError()){
                 throw new HttpClientErrorException(HttpStatus.BAD_REQUEST,newCommentErrors.toString());
 

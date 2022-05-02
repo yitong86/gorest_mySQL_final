@@ -6,6 +6,6 @@ import com.careerdevs.gorestfinal.models.User;
 import org.springframework.data.repository.CrudRepository;
 
 
-public interface UserRepository extends CrudRepository<User, Integer> {
+public interface UserRepository extends CrudRepository<User,Long> {
     //primary key id
 }
