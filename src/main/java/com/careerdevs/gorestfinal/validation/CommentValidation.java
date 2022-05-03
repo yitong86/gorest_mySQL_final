@@ -29,7 +29,7 @@ public class CommentValidation {
         String commentName = comment.getName();
         String commentEmail = comment.getEmail();
         long commentPostId  = comment.getPost_id();
-
+        String commentBody = comment.getBody();
 
         if(commentName == null || commentName.trim().equals("")){
             errors.addError("Name ","Name  can not be left blank");
@@ -37,11 +37,14 @@ public class CommentValidation {
         if(commentEmail == null || commentEmail.trim().equals("")){
             errors.addError("Email","Email cannot be left blank");
         }
+        if(commentBody == null || commentBody.trim().equals("")){
+            errors.addError("Body","Body cannot be left blank");
+        }
         if(commentPostId == 0){
             errors.addError("PostId ","PostId  cannot be left blank");
         }else{
             //is the commentPostId connected to an existing user
-            Optional<Post> foundUser = postRepository.findById(commentPostId);
+            Optional<Post> foundUser = postRepo.findById(commentPostId);
             if(foundUser.isEmpty()){
                 errors.addError("user_id","User_id is invalid because there is no user found with the id :" + commentPostId);
             }

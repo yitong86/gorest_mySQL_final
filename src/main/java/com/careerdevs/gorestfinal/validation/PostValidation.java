@@ -22,8 +22,8 @@ public class PostValidation {
             if(post.getId() == 0){
                 errors.addError("id","ID can not be left blank");
             }else{
-                Optional<Post> foundUser = postRepo.findById(post.getId());
-                if(foundUser.isEmpty()){
+                Optional<Post> foundPost = postRepo.findById(post.getId());
+                if(foundPost.isEmpty()){
                     errors.addError("id","No user found with the id:" + post.getId());
                 }
             }
@@ -33,13 +33,13 @@ public class PostValidation {
         long postUserId = post.getUser_id();
 
         if(postTitle == null || postTitle.trim().equals("")){
-            errors.addError("title","Title can not be left blank");
+            errors.addError("Title","Title can not be left blank");
         }
         if(postBody == null || postBody.trim().equals("")){
-            errors.addError("body","body cannot be left blank");
+            errors.addError("Body","Body cannot be left blank");
         }
         if(postUserId == 0){
-            errors.addError("user_id","User_id cannot be left blank");
+            errors.addError("User_id","User_id cannot be left blank");
         }else{
             //is the postUserId connected to an existing user
             Optional<User> foundUser = userRepo.findById(postUserId);

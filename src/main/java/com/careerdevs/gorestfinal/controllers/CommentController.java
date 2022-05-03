@@ -91,6 +91,7 @@ public class CommentController {
                 throw new HttpClientErrorException(HttpStatus.NOT_FOUND,"Comment not found with id :" +id);
 
             }
+            commentRepository.deleteById(uID);
             return new ResponseEntity<>(foundComment,HttpStatus.OK);
 
 

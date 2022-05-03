@@ -19,8 +19,8 @@ public class TodoValidation {
             if(todo.getId() == 0){
                 errors.addError("id","ID can not be left blank");
             }else{
-                Optional<Todo> foundUser = todoRepo.findById(todo.getId());
-                if(foundUser.isEmpty()){
+                Optional<Todo> foundTodo = todoRepo.findById(todo.getId());
+                if(foundTodo.isEmpty()){
                     errors.addError("id","No user found with the id:" + todo.getId());
                 }
             }
@@ -28,20 +28,24 @@ public class TodoValidation {
         String todoTitle = todo.getTitle();
         String todoStatus = todo.getStatus();
         long todoUserId = todo.getUser_id();
+        String todoDueOn = todo.getDue_on();
 
         if(todoTitle == null || todoTitle.trim().equals("")){
-            errors.addError("title","Title can not be left blank");
+            errors.addError("Title","Title can not be left blank");
         }
         if(todoStatus == null || todoStatus.trim().equals("")){
-            errors.addError("body","body cannot be left blank");
+            errors.addError("Status ","Status  cannot be left blank");
+        }
+        if(todoDueOn == null || todoDueOn.trim().equals("")){
+            errors.addError("Due_on","Due_on can not be left blank");
         }
         if(todoUserId == 0){
-            errors.addError("user_id","User_id cannot be left blank");
+            errors.addError("User_id","User_id cannot be left blank");
         }else{
             //is the postUserId connected to an existing user
             Optional<User> foundUser = userRepo.findById(todoUserId);
             if(foundUser.isEmpty()){
-                errors.addError("user_id","User_id is invalid because there is no user found with the id :" + todoUserId);
+                errors.addError("User_id","User_id is invalid because there is no user found with the id :" + todoUserId);
             }
 
         }

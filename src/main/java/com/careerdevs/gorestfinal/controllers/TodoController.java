@@ -70,6 +70,8 @@ public class TodoController {
             if (foundTodo.isEmpty()) {
                 throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "Todo is not found with ID: " + id);
             }
+
+            todoRepository.deleteById(uID);
             return new ResponseEntity<>(foundTodo, HttpStatus.OK);
 
         } catch (HttpClientErrorException e) {

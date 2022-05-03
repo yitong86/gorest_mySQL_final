@@ -1,6 +1,7 @@
 package com.careerdevs.gorestfinal.controllers;
 
 import com.careerdevs.gorestfinal.models.Post;
+import com.careerdevs.gorestfinal.models.User;
 import com.careerdevs.gorestfinal.repositories.PostRepository;
 import com.careerdevs.gorestfinal.repositories.UserRepository;
 import com.careerdevs.gorestfinal.utils.ApiErrorHandling;
@@ -14,10 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /*
 
@@ -79,22 +77,23 @@ public class PostController{
 
         @DeleteMapping("/{id}")
         public ResponseEntity<?> deleteById(@PathVariable ("id") String id){
-        try{
-            if(ApiErrorHandling.isStrNaN(id)){
-                throw new HttpClientErrorException(HttpStatus.BAD_REQUEST,id + " is not valid id.");
-            }
-            long uID = Integer.parseInt(id);
-             Optional<Post> foundPost = postRepository.findById(uID);
-             if(foundPost.isEmpty()){
-                 throw  new HttpClientErrorException(HttpStatus.NOT_FOUND,"Post not found with id  " + id);
-             }
-            return new ResponseEntity<>(foundPost,HttpStatus.OK);
+            try{
+                if(ApiErrorHandling.isStrNaN(id)){
+                    throw new HttpClientErrorException(HttpStatus.BAD_REQUEST,id + " is not valid id.");
+                }
+                long uID = Integer.parseInt(id);
+                 Optional<Post> foundPost = postRepository.findById(uID);
+                 if(foundPost.isEmpty()){
+                     throw  new HttpClientErrorException(HttpStatus.NOT_FOUND,"Post not found with id  " + id);
+                 }
+                 postRepository.deleteById(uID);
+                return new ResponseEntity<>(foundPost,HttpStatus.OK);
 
-        }catch(HttpClientErrorException e){
-            return ApiErrorHandling.customApiError(e.getMessage(),e.getStatusCode());
-        }catch(Exception e){
-            return ApiErrorHandling.genericApiError(e);
-        }
+            }catch(HttpClientErrorException e){
+                return ApiErrorHandling.customApiError(e.getMessage(),e.getStatusCode());
+            }catch(Exception e){
+                return ApiErrorHandling.genericApiError(e);
+            }
         }
         @DeleteMapping("/deleteall")
         public ResponseEntity<?> deleteAllUser(){
@@ -128,10 +127,17 @@ public class PostController{
 
                 Post foundPost = restTemplate.getForObject(url,Post.class);
 
+
             System.out.println(foundPost);
             if(foundPost == null){
                 throw  new HttpClientErrorException(HttpStatus.NOT_FOUND,"Post data was null.");
             }
+            Iterable<Post> allPost = postRepository.findAll();
+            List<Post> result = new ArrayList<Post>();
+            allPost.forEach(result::add);
+            long randomId = result.get((int) (result.size()*Math.random())).getUser_id();
+            foundPost.setUser_id(randomId);
+
             Post savePost = postRepository.save(foundPost);
             return new ResponseEntity<>(savePost,HttpStatus.CREATED);
 
@@ -178,6 +184,14 @@ public class PostController{
 
             }
             //upload all posts to sql
+            Iterable<User> allUser = userRepository.findAll();
+            List<User> result = new ArrayList<User>();
+            allUser.forEach(result::add);
+            for(Post allPost : allPosts){
+                long randomId = result.get((int) (result.size()*Math.random())).getId();
+;               allPost.setUser_id(randomId);
+            }
+
             postRepository.saveAll(allPosts);
             return new ResponseEntity<>("Posts Created: " + allPosts.size(),HttpStatus.OK);
 

@@ -25,7 +25,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/users")
 public class UserController {
 //    Required Routes for GoRestSQL MVP:
 //    GET route that returns one user by ID from the SQL database
@@ -206,7 +206,7 @@ public class UserController {
         }
     }
 
-
+    //create a new user
     @PostMapping("/")
     public ResponseEntity<?> createNewUser(@RequestBody User newUser) {
         try {
