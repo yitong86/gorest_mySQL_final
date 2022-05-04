@@ -35,6 +35,8 @@ public class TodoValidation {
         }
         if(todoStatus == null || todoStatus.trim().equals("")){
             errors.addError("Status ","Status  cannot be left blank");
+        }else if(!(todoStatus.equals("active") || todoStatus.equals("inactive"))){
+            errors.addError("status","Status must be: active or inactive");
         }
         if(todoDueOn == null || todoDueOn.trim().equals("")){
             errors.addError("Due_on","Due_on can not be left blank");

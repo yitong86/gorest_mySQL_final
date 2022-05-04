@@ -36,6 +36,8 @@ public class CommentValidation {
         }
         if(commentEmail == null || commentEmail.trim().equals("")){
             errors.addError("Email","Email cannot be left blank");
+        }else if(!(commentEmail.contains("@") && commentEmail.contains(".com") && !commentEmail.startsWith("@"))){
+            errors.addError("Email","Email must be include @ and .com and not start with @");
         }
         if(commentBody == null || commentBody.trim().equals("")){
             errors.addError("Body","Body cannot be left blank");

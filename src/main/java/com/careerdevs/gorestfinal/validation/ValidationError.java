@@ -20,7 +20,7 @@ public class ValidationError {
         //check whether there are any errors during the process of validating this data
         return errors.size() != 0;
     }
-    //turn it  into Jsonn
+    //turn it  into Json
    // @Override
 //    public String toString(){
 //        String errorMessage = "ValidationError:\n";
@@ -28,6 +28,8 @@ public class ValidationError {
 //            errorMessage +=err.getKey()+": " + err.getValue() + "\n";
 //        }
 //    }
+
+
     @Override
     public String toString() {
         StringBuilder errorMessage = new StringBuilder("ValidationError:\n");

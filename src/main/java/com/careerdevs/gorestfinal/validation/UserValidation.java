@@ -41,6 +41,8 @@ public class UserValidation {
         }
         if(userEmail == null || userEmail.trim().equals("")){
             errors.addError("Email","Email can not be left blank");
+        }else if(!(userEmail.contains("@") && userEmail.contains(".com") && !userEmail.startsWith("@"))){
+            errors.addError("Email","Email must be include @ and .com and not start with @");
         }
         if(userGender == null || userGender.trim().equals("")){
             errors.addError("Gender","Gender can not be left blank");
@@ -49,6 +51,7 @@ public class UserValidation {
         }
         if(userStatus == null || userStatus.trim().equals("")){
             errors.addError("Status","Status can not be left blank");
+
         }else if(!(userStatus.equals("active") || userStatus.equals("inactive"))){
             errors.addError("status","Status must be: active or inactive");
         }
